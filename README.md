@@ -1,0 +1,1 @@
+# skycha-qr-app
