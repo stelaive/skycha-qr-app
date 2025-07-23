@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스카이차 - 앱 다운로드</title>
+    <meta name="description" content="5% 돌려주는 스카이차 앱 다운로드">
+    
+    <!-- SEO 및 소셜 미디어 -->
+    <meta property="og:title" content="5% 돌려주는 스카이차">
+    <meta property="og:description" content="현장 업무 관리와 5% 리워드를 한번에!">
+    <meta property="og:type" content="website">
+    
+    <!-- 즉시 리다이렉트를 위한 스타일 (최소한만) -->
+    <style>
+        body { 
+            margin: 0; 
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .fallback {
+            text-align: center;
+            padding: 20px;
+            max-width: 400px;
+        }
+        .fallback h1 { 
+            color: #333; 
+            margin-bottom: 20px; 
+        }
+        .store-btn {
+            display: block;
+            width: 200px;
+            margin: 15px auto;
+            padding: 12px 20px;
+            background: #007AFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .store-btn:hover { 
+            background: #0056CC; 
+        }
+        .android { 
+            background: #34A853; 
+        }
+        .android:hover { 
+            background: #2E7D32; 
+        }
+        .loading {
+            color: #666;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 백업용 수동 선택 화면 (자동 리다이렉트 실패시에만 표시) -->
+    <div class="fallback" id="fallback" style="display: none;">
+        <h1>🚗 스카이차</h1>
+        <p>5% 돌려주는 현장 업무 관리 앱</p>
+        
+        <a href="https://play.google.com/store/apps/details?id=com.steve.kim.sadariapp&pcampaignid=web_share" 
+           class="store-btn android">
+           🤖 Google Play
+        </a>
+        
+        <a href="https://apps.apple.com/kr/app/5-%EB%8F%8C%EB%A0%A4%EC%A3%BC%EB%8A%94-%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%B0%A8/id6747275589" 
+           class="store-btn">
+           🍎 App Store
+        </a>
+        
+        <div class="loading">자동 리다이렉트가 작동하지 않는 경우 위 버튼을 클릭하세요</div>
+    </div>
+
+    <script>
+        // 앱스토어 링크
+        const ANDROID_URL = "https://play.google.com/store/apps/details?id=com.steve.kim.sadariapp&pcampaignid=web_share";
+        const IOS_URL = "https://apps.apple.com/kr/app/5-%EB%8F%8C%EB%A0%A4%EC%A3%BC%EB%8A%94-%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%B0%A8/id6747275589";
+
+        // 즉시 실행 함수 - 페이지 로드와 동시에 실행
+        (function() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            
+            // iOS 디바이스 감지 (iPhone, iPad, iPod)
+            if (/iphone|ipad|ipod/.test(userAgent)) {
+                // iOS Safari에서는 window.location.href 사용
+                window.location.href = IOS_URL;
+                return;
+            }
+            
+            // Android 디바이스 감지
+            if (/android/.test(userAgent)) {
+                window.location.href = ANDROID_URL;
+                return;
+            }
+            
+            // 모바일 디바이스이지만 Android/iOS가 아닌 경우 (예: Windows Phone 등)
+            if (/mobile/.test(userAgent)) {
+                // Android 링크로 기본 이동 (대부분의 기타 모바일은 Android 호환)
+                window.location.href = ANDROID_URL;
+                return;
+            }
+            
+            // 데스크톱이나 인식되지 않는 디바이스
+            // 500ms 후에 백업 화면 표시 (자동 리다이렉트가 실패한 경우)
+            setTimeout(function() {
+                document.getElementById('fallback').style.display = 'block';
+            }, 500);
+            
+        })();
+
+        // 페이지가 완전히 로드된 후에도 한번 더 체크 (백업)
+        window.addEventListener('load', function() {
+            // 이미 리다이렉트되었다면 이 코드는 실행되지 않음
+            setTimeout(function() {
+                const fallback = document.getElementById('fallback');
+                if (fallback && fallback.style.display === 'none') {
+                    fallback.style.display = 'block';
+                }
+            }, 1000);
+        });
+
+        // 사용자가 뒤로가기 버튼을 눌렀을 때 처리
+        window.addEventListener('pageshow', function(event) {
+            // 캐시에서 페이지가 로드된 경우 다시 리다이렉트 시도
+            if (event.persisted) {
+                location.reload();
+            }
+        });
+        
+        // 에러 처리
+        window.addEventListener('error', function() {
+            document.getElementById('fallback').style.display = 'block';
+        });
+    </script>
+</body>
+</html> 
